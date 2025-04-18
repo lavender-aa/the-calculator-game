@@ -4,11 +4,11 @@
 # specific files
 !LICENSE
 !.gitignore
-!install.sh
+!install.*
 
 # file types
-!*/*.md
-!*/*.py
+!*.md
+!*.py
 
 # include folders
 !*/
