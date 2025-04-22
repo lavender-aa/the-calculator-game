@@ -2,6 +2,12 @@ import tkinter as tk
 from sympy import sympify, SympifyError
 import random
 
+
+# TODO:
+#   - [] add general game information popup box and icon
+#   - [] implement effects
+
+
 # main layout: calculator
 #    _______ 
 #    c ( ) /
@@ -12,9 +18,9 @@ import random
 
 # left side: info
 #   score: 
-#   target: 123
-#   presses: 10 (increases or decreases based on closeness to value)
-#   effect: no evens
+#   target: 
+#   presses: 
+#   effect: 
 
 # initialize random seed
 random.seed()
@@ -104,10 +110,10 @@ def button_press(button):
 root = tk.Tk()
 
 # left side
-score = tk.Label(root, text=f"Score: {scoreVal}")
-target = tk.Label(root, text=f"Target: {targetVal}")
-presses = tk.Label(root, text=f"Presses: {numButtonPresses}")
-effect = tk.Label(root, text="Effect: none")
+score = tk.Label(root, text=f"Score: {scoreVal}", padx=10)
+target = tk.Label(root, text=f"Target: {targetVal}", padx=10)
+presses = tk.Label(root, text=f"Presses: {numButtonPresses}", padx=10)
+effect = tk.Label(root, text="Effect: none", padx=10)
 
 # main calculator
 text = tk.Label(root, text=f"{current}", font=("Arial",25))
