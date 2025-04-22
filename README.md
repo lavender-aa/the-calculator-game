@@ -47,15 +47,13 @@ Overlapping effects may cause the round to be very difficult or even impossible.
 
 # Installation
 
-## Dependencies
-To build this project, you'll need:
-- Python3
-- Pip (for Pyinstaller)
-
-## Process
+## Windows
 - Clone this repository.
-- Run an install script (`install.sh` for Unix, `install.ps1` for Windows).
-That's it! The game's executable will be installed to the root of this repository, but you can move anywhere you'd like.
+- Find the game executable in the `builds/` directory.
+
+## Unix
+- Clone this repository.
+- Run `install.sh` to create an executable inside the `builds/` directory.
 
 # Uninstallation
-To uninstall, delete this repository (and the executable, if you've moved it somewhere else).
+To uninstall, delete this repository.

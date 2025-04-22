@@ -9,6 +9,7 @@
 # file types
 !*.md
 !*.py
+!*.exe
 
 # include folders
 !*/
