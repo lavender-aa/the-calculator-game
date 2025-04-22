@@ -1,5 +1,6 @@
 import tkinter as tk
 from sympy import sympify, SympifyError
+import random
 
 # main layout: calculator
 #    _______ 
@@ -15,11 +16,16 @@ from sympy import sympify, SympifyError
 #   presses: 10 (increases or decreases based on closeness to value)
 #   effect: no evens
 
-score = 0
-current = 0
-curr_text = ""
-target = 100
-numButtonPresses = 10
+# initialize random seed
+random.seed()
+
+# values to keep track of
+scoreVal = 0
+current = random.randint(0, 100) # start with a random 2 digit number
+curr_text = f"{current}"
+targetVal = 100
+numButtonPresses = 20
+curr_digit = 0
 effects = [ # list of tuples: name, desc
     ("None", "No effect."),
     ("No evens", "No even-numbered buttons can be used."),
@@ -30,56 +36,81 @@ effects = [ # list of tuples: name, desc
 disabled = [] # strings of labels that are disabled
 
 def next_round():
-    global numButtonPresses
-    numButtonPresses = 10
-    global curr_text
-    curr_text = ""
-    text.config(text = "")
-    presses.config(text = "Presses: 10")
+    global numButtonPresses, curr_text, scoreVal, targetVal, current
+    
+    # update values
+    numButtonPresses = 20
+    scoreVal += int(1.0/(abs(current - targetVal) + 1) * 100)
+    current = random.randint(0, 100)
+    curr_text = f"{current}"
+    targetVal *= 2
+    
+    # update labels
+    text["text"] = curr_text
+    score["text"] = f"Score: {scoreVal}"
+    target["text"] = f"Target: {targetVal}"
+    presses["text"] = f"Presses: {numButtonPresses}"
 
 # handle each button
 def button_press(button):
-    # globals
-    global numButtonPresses
-    global curr_text
+    global numButtonPresses, curr_text, curr_digit, scoreVal, current
     
     # update presses
     numButtonPresses -= 1
-    presses.config(text = f"presses: {numButtonPresses}")
+    presses["text"] = f"Presses: {numButtonPresses}"
     
     if numButtonPresses == 0:
         next_round()
         return
     
+        
     if button == "=": # acts as the submit button
+        curr_digit = 0
         try: # update current
             current = sympify(curr_text)
-            if current == target:
+            if current == targetVal:
                 next_round()
                 return
+            curr_text = str(current)
+            text["text"] = curr_text
         except SympifyError:
             # popup box, deduct points
+            print("subtracting points")
+            scoreVal -= 10
             pass
-
-    elif button == "c":
+        return
+    
+    if button == "c":
+        curr_digit = 0
         curr_text = ""
-        text.config(text = "")
+        text["text"] = ""
+        return
+    
+    if button in [str(n) for n in range(10)] and button not in disabled:
+        if curr_digit < 2:
+            curr_digit += 1
+            curr_text += button
+            text["text"] = curr_text
+        else:
+            numButtonPresses += 1 # give back button press
+            presses["text"] = f"Presses: {numButtonPresses}"
     elif button not in disabled:
+        curr_digit = 0
         curr_text += button
-        text.config(text = curr_text)
+        text["text"] = curr_text
     
 
 
 root = tk.Tk()
 
 # left side
-score = tk.Label(root, text=f"score: {score}")
-target = tk.Label(root, text=f"target: {target}")
-presses = tk.Label(root, text=f"presses: {numButtonPresses}")
-effect = tk.Label(root, text="effect: none")
+score = tk.Label(root, text=f"Score: {scoreVal}")
+target = tk.Label(root, text=f"Target: {targetVal}")
+presses = tk.Label(root, text=f"Presses: {numButtonPresses}")
+effect = tk.Label(root, text="Effect: none")
 
 # main calculator
-text = tk.Label(root, text="", font=("Arial",25))
+text = tk.Label(root, text=f"{current}", font=("Arial",25))
 
 clear = tk.Button(root, text="c", width=3, height=2, command=lambda: button_press("c"))
 openP = tk.Button(root, text="(", width=3, height=2, command=lambda: button_press("("))
