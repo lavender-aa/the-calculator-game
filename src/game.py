@@ -42,13 +42,43 @@ effects = [ # list of tuples: name, desc
     ("Only squares", "Only square buttons (1, 4, 9) can be used."),
     ("No multiplication", "Cannot use the multiply button.")
 ]
-disabled = [] # strings of labels that are disabled
 
-def reset_buttons():
+def impl_effect(curr_effect):
+    # update effect text
+    effect["text"] = f"Effect: {effects[curr_effect][0]}"
     
+    # update any buttons
+    match curr_effect:
+        case 1: # no evens
+            for button in game_buttons_nums:
+                if int(button["text"]) % 2 == 0:
+                    button["state"] = "disabled"
+        case 2: # no odds
+            for button in game_buttons_nums:
+                if int(button["text"]) % 2 == 1:
+                    button["state"] = "disabled"
+        case 3: # squares only
+            enabled = [one, four, nine]
+            for button in game_buttons_nums:
+                if button not in enabled:
+                    button["state"] = "disabled"
+        case 4: # no multiplication
+            mult["state"] = "disabled"
+        case _: return
+
 
 def next_round():
     global numButtonPresses, curr_text, scoreVal, targetVal, current, curr_digit
+    
+    # reset any disabled buttons
+    for button in game_buttons_nums + game_buttons_syms:
+        if button["state"] == "disabled":
+            button["state"] = "normal"
+    
+    # roll random effect, put into place
+    curr_effect = random.randint(0, len(effects) - 1)
+    print(curr_effect)
+    impl_effect(curr_effect)
     
     # update values
     scoreVal += int(1.0/(abs(current - targetVal) + 1) * 100) + numButtonPresses * 10
@@ -87,8 +117,8 @@ def button_press(button):
             curr_text = str(current)
             text["text"] = curr_text
         except SympifyError:
-            # popup box, deduct points
             print("subtracting points")
+            messagebox.showerror("Invalid expression", "Invalid expression. Deductiong 10 points.")
             scoreVal -= 10
             pass
         return
@@ -99,7 +129,7 @@ def button_press(button):
         text["text"] = ""
         return
     
-    if button in [str(n) for n in range(10)] and button not in disabled:
+    if button in [str(n) for n in range(10)]:
         if curr_digit < 2:
             curr_digit += 1
             curr_text += button
@@ -107,11 +137,15 @@ def button_press(button):
         else:
             numButtonPresses += 1 # give back button press
             presses["text"] = f"Presses: {numButtonPresses}"
-    elif button not in disabled:
+    else:
         curr_digit = 0
         curr_text += button
         text["text"] = curr_text
     
+def show_effect_info():
+    global curr_effect
+    print(curr_effect) # bug: always 0 for some reason
+    messagebox.showinfo(effects[curr_effect][0], effects[curr_effect][1])
 
 
 root = Tk()
@@ -128,8 +162,8 @@ Try to get as close to the target as possible -- the closer you are, the more po
 score = Label(root, text=f"Score: {scoreVal}", padx=10, font=ltextfont)
 target = Label(root, text=f"Target: {targetVal}", padx=10, font=ltextfont)
 presses = Label(root, text=f"Presses: {numButtonPresses}", padx=10, font=ltextfont)
-effect = Label(root, text="Effect: none", padx=10, font=ltextfont)
-effect_info = Button(root, text="Effect Info", width=6, height=1, command=lambda: messagebox.showinfo(effects[curr_effect][0], effects[curr_effect][1]), font=lbuttonfont)
+effect = Label(root, text="Effect: None", padx=10, font=ltextfont)
+effect_info = Button(root, text="Effect Info", width=6, height=1, command=show_effect_info, font=lbuttonfont)
 game_info = Button(root, text="Game Info", width=6, height=1, command=lambda: messagebox.showinfo("Game Information", gameinfo), font=lbuttonfont)
 
 # main calculator
@@ -159,13 +193,22 @@ zero = Button(root, text="0", width=15, height=2, command=lambda: button_press("
 enter = Button(root, text="=", width=3, height=2, command=lambda: button_press("="))
 
 # dictionary of game buttons
-game_buttons = {
-    "c": clear, "(": openP, ")": closeP, "/": divide, 
-    "7": seven, "8": eight, "9": nine, "*": mult,
-    "4": four, "5": five, "6": six, "-": sub,
-    "1": one, "2": two, "3": three, "+": add,
-    "0": zero, "=": enter
-}
+# game_buttons = {
+#     "c": clear, "(": openP, ")": closeP, "/": divide, 
+#     "7": seven, "8": eight, "9": nine, "*": mult,
+#     "4": four, "5": five, "6": six, "-": sub,
+#     "1": one, "2": two, "3": three, "+": add,
+#     "0": zero, "=": enter
+# }
+game_buttons_nums = [
+    one, two, three,
+    four, five, six,
+    seven, eight, nine
+]
+game_buttons_syms = [
+    openP, closeP, divide,
+    mult, sub, add, enter
+]
 
 # pack all elements
 r=0
