@@ -6,7 +6,6 @@ import random
 
 
 # TODO:
-#   - [] add general game information popup box and icon
 #   - [] implement effects
 
 
