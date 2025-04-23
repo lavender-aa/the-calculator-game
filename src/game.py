@@ -1,4 +1,6 @@
-import tkinter as tk
+from tkinter import *
+from tkinter import messagebox
+import tkinter.font as font
 from sympy import sympify, SympifyError
 import random
 
@@ -21,17 +23,19 @@ import random
 #   target: 
 #   presses: 
 #   effect: 
+#   effect info button
 
 # initialize random seed
 random.seed()
 
 # values to keep track of
 scoreVal = 0
-current = random.randint(0, 100) # start with a random 2 digit number
+current = random.randint(0, 99) # start with a random 2 digit number
 curr_text = f"{current}"
 targetVal = 100
 numButtonPresses = 20
-curr_digit = 0
+curr_digit = len(str(current))
+curr_effect = 0
 effects = [ # list of tuples: name, desc
     ("None", "No effect."),
     ("No evens", "No even-numbered buttons can be used."),
@@ -42,12 +46,13 @@ effects = [ # list of tuples: name, desc
 disabled = [] # strings of labels that are disabled
 
 def next_round():
-    global numButtonPresses, curr_text, scoreVal, targetVal, current
+    global numButtonPresses, curr_text, scoreVal, targetVal, current, curr_digit
     
     # update values
+    scoreVal += int(1.0/(abs(current - targetVal) + 1) * 100) + numButtonPresses * 10
     numButtonPresses = 20
-    scoreVal += int(1.0/(abs(current - targetVal) + 1) * 100)
-    current = random.randint(0, 100)
+    current = random.randint(0, 99)
+    curr_digit = len(str(current))
     curr_text = f"{current}"
     targetVal *= 2
     
@@ -107,39 +112,49 @@ def button_press(button):
     
 
 
-root = tk.Tk()
+root = Tk()
+root.title("The Calculator Game")
 
 # left side
-score = tk.Label(root, text=f"Score: {scoreVal}", padx=10)
-target = tk.Label(root, text=f"Target: {targetVal}", padx=10)
-presses = tk.Label(root, text=f"Presses: {numButtonPresses}", padx=10)
-effect = tk.Label(root, text="Effect: none", padx=10)
+ltextfont = font.Font(family="Arial", size=20)
+lbuttonfont = font.Font(family="Arial", size=10)
+gameinfo = """
+You can only enter up to a 2-digit number before you must perform an operation.
+
+Try to get as close to the target as possible -- the closer you are, the more points you get.
+"""
+score = Label(root, text=f"Score: {scoreVal}", padx=10, font=ltextfont)
+target = Label(root, text=f"Target: {targetVal}", padx=10, font=ltextfont)
+presses = Label(root, text=f"Presses: {numButtonPresses}", padx=10, font=ltextfont)
+effect = Label(root, text="Effect: none", padx=10, font=ltextfont)
+effect_info = Button(root, text="Effect Info", width=6, height=1, command=lambda: messagebox.showinfo(effects[curr_effect][0], effects[curr_effect][1]), font=lbuttonfont)
+game_info = Button(root, text="Game Info", width=6, height=1, command=lambda: messagebox.showinfo("Game Information", gameinfo), font=lbuttonfont)
 
 # main calculator
-text = tk.Label(root, text=f"{current}", font=("Arial",25))
+text = Label(root, text=f"{current}", font=("Arial",25))
 
-clear = tk.Button(root, text="c", width=3, height=2, command=lambda: button_press("c"))
-openP = tk.Button(root, text="(", width=3, height=2, command=lambda: button_press("("))
-closeP = tk.Button(root, text=")", width=3, height=2, command=lambda: button_press(")"))
-divide = tk.Button(root, text="/", width=3, height=2, command=lambda: button_press("/"))
+clear = Button(root, text="c", width=3, height=2, command=lambda: button_press("c"))
+openP = Button(root, text="(", width=3, height=2, command=lambda: button_press("("))
+closeP = Button(root, text=")", width=3, height=2, command=lambda: button_press(")"))
+divide = Button(root, text="/", width=3, height=2, command=lambda: button_press("/"))
 
-seven = tk.Button(root, text="7", width=3, height=2, command=lambda: button_press("7"))
-eight = tk.Button(root, text="8", width=3, height=2, command=lambda: button_press("8"))
-nine = tk.Button(root, text="9", width=3, height=2, command=lambda: button_press("9"))
-mult = tk.Button(root, text="*", width=3, height=2, command=lambda: button_press("*"))
+seven = Button(root, text="7", width=3, height=2, command=lambda: button_press("7"))
+eight = Button(root, text="8", width=3, height=2, command=lambda: button_press("8"))
+nine = Button(root, text="9", width=3, height=2, command=lambda: button_press("9"))
+mult = Button(root, text="*", width=3, height=2, command=lambda: button_press("*"))
 
-four = tk.Button(root, text="4", width=3, height=2, command=lambda: button_press("4"))
-five = tk.Button(root, text="5", width=3, height=2, command=lambda: button_press("5"))
-six = tk.Button(root, text="6", width=3, height=2, command=lambda: button_press("6"))
-sub = tk.Button(root, text="-", width=3, height=2, command=lambda: button_press("-"))
+four = Button(root, text="4", width=3, height=2, command=lambda: button_press("4"))
+five = Button(root, text="5", width=3, height=2, command=lambda: button_press("5"))
+six = Button(root, text="6", width=3, height=2, command=lambda: button_press("6"))
+sub = Button(root, text="-", width=3, height=2, command=lambda: button_press("-"))
 
-one = tk.Button(root, text="1", width=3, height=2, command=lambda: button_press("1"))
-two = tk.Button(root, text="2", width=3, height=2, command=lambda: button_press("2"))
-three = tk.Button(root, text="3", width=3, height=2, command=lambda: button_press("3"))
-add = tk.Button(root, text="+", width=3, height=2, command=lambda: button_press("+"))
+one = Button(root, text="1", width=3, height=2, command=lambda: button_press("1"))
+two = Button(root, text="2", width=3, height=2, command=lambda: button_press("2"))
+three = Button(root, text="3", width=3, height=2, command=lambda: button_press("3"))
+add = Button(root, text="+", width=3, height=2, command=lambda: button_press("+"))
 
-zero = tk.Button(root, text="0", width=15, height=2, command=lambda: button_press("0"))
-enter = tk.Button(root, text="=", width=3, height=2, command=lambda: button_press("="))
+zero = Button(root, text="0", width=15, height=2, command=lambda: button_press("0"))
+enter = Button(root, text="=", width=3, height=2, command=lambda: button_press("="))
 
 # pack all elements
 r=0
@@ -149,9 +164,11 @@ score.grid(row=r, column=c, sticky="w")
 target.grid(row=r+1, column=c, sticky="w")
 presses.grid(row=r+2, column=c, sticky="w")
 effect.grid(row=r+3, column=c, sticky="w")
+effect_info.grid(row=r+4, column=c, sticky="n")
+game_info.grid(row=r+5, column=c)
 c += 1
 
-tk.Label(root, text="         ").grid(row=r, column=c)
+Label(root, text="         ").grid(row=r, column=c)
 c += 1
 
 text.grid(row=r, column=c, columnspan=4)
