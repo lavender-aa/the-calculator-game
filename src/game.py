@@ -44,6 +44,9 @@ effects = [ # list of tuples: name, desc
 ]
 disabled = [] # strings of labels that are disabled
 
+def reset_buttons():
+    
+
 def next_round():
     global numButtonPresses, curr_text, scoreVal, targetVal, current, curr_digit
     
@@ -154,6 +157,15 @@ add = Button(root, text="+", width=3, height=2, command=lambda: button_press("+"
 
 zero = Button(root, text="0", width=15, height=2, command=lambda: button_press("0"))
 enter = Button(root, text="=", width=3, height=2, command=lambda: button_press("="))
+
+# dictionary of game buttons
+game_buttons = {
+    "c": clear, "(": openP, ")": closeP, "/": divide, 
+    "7": seven, "8": eight, "9": nine, "*": mult,
+    "4": four, "5": five, "6": six, "-": sub,
+    "1": one, "2": two, "3": three, "+": add,
+    "0": zero, "=": enter
+}
 
 # pack all elements
 r=0
