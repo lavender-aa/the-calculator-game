@@ -36,17 +36,17 @@ numButtonPresses = 20
 lives = 3
 curr_digit = len(str(current))
 curr_effect = 0
-effects = [ # list of tuples: name, desc
-    ("None", "No effect."),
-    ("No evens", "No even-numbered buttons can be used."),
-    ("No odds", "No odd-numbered buttons can be used."),
-    ("Only squares", "Only square buttons (1, 4, 9) can be used."),
-    ("No multiplication", "Cannot use the multiply button.")
+effects = [ # list of names
+    "None",
+    "No evens",
+    "No odds",
+    "Only squares",
+    "No multiplication"
 ]
 
 def impl_effect(curr_effect):
     # update effect text
-    effect["text"] = f"Effect: {effects[curr_effect][0]}"
+    effect["text"] = f"Effect: {effects[curr_effect]}"
     
     # update any buttons
     match curr_effect:
@@ -78,7 +78,6 @@ def next_round():
     
     # roll random effect, put into place
     curr_effect = random.randint(0, len(effects) - 1)
-    print(curr_effect)
     impl_effect(curr_effect)
     
     # update values
@@ -108,7 +107,7 @@ def restart():
     curr_text = str(current)
     target["text"] = f"Target: {targetVal}"
     score["text"] = f"Score: {scoreVal}"
-    effect["text"] = f"Effect: {effects[curr_effect][0]}"
+    effect["text"] = f"Effect: {effects[curr_effect]}"
     livesL["text"] = f"Lives: {lives}"
     presses["text"] = f"Presses: {numButtonPresses}"
     text["text"] = curr_text
