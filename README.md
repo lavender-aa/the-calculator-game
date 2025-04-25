@@ -30,7 +30,6 @@ Some examples of what effects can look like:
 - Can't use even buttons
 - Multiplication button uses 10 score
 - Addition only
-- Can only use equals button once
 - No parentheses
 
 # Installation
