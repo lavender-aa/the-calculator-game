@@ -36,11 +36,11 @@ Some examples of what effects can look like:
 
 ## Windows
 - Run `install.bat`
-- Find game executable in `dist/`
+- Run game executable with `.\dist\game.exe`
 
 ## Unix
 - Run `install.sh`
-- Find game executable in `dist/`
+- Run game executable with `./dist/game`
 
 # Uninstallation
 To uninstall, delete this repository.
