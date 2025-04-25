@@ -37,7 +37,10 @@ effects = [ # list of names
     "No evens",
     "No odds",
     "Only squares",
-    "No multiplication"
+    "No multiplication",
+    "Only addition",
+    "No parentheses",
+    "Only primes"
 ]
 
 def impl_effect(curr_effect):
@@ -61,6 +64,19 @@ def impl_effect(curr_effect):
                     button["state"] = "disabled"
         case 4: # no multiplication
             mult["state"] = "disabled"
+        case 5: # addition only
+            for button in game_buttons_syms:
+                button["state"] = "disabled"
+            add["state"] = "normal"
+        case 6: # no parentheses
+            openP["state"] = "disabled"
+            closeP["state"] = "disabled"
+        case 7: # only primes
+            two["state"] = "disabled"
+            four["state"] = "disabled"
+            six["state"] = "disabled"
+            eight["state"] = "disabled"
+            nine["state"] = "disabled"
         case _: return
 
 
@@ -93,6 +109,13 @@ def next_round():
 # restart the game if the player runs out of lives
 def restart():
     global targetVal, scoreVal, curr_effect, lives, numButtonPresses, current, curr_digit, curr_text
+    
+    # reset any disabled buttons
+    for button in game_buttons_nums + game_buttons_syms:
+        if button["state"] == "disabled":
+            button["state"] = "normal"
+            
+    # reset values
     targetVal = 100
     scoreVal = 0
     curr_effect = 0
@@ -101,6 +124,8 @@ def restart():
     current = random.randint(0, 99)
     curr_digit = len(str(current))
     curr_text = str(current)
+    
+    # updated labels
     target["text"] = f"Target: {targetVal}"
     score["text"] = f"Score: {scoreVal}"
     effect["text"] = f"Effect: {effects[curr_effect]}"
@@ -237,7 +262,7 @@ game_buttons_nums = [
 ]
 game_buttons_syms = [
     openP, closeP, divide,
-    mult, sub, add, enter
+    mult, sub, add # enter excluded
 ]
 
 # pack all elements
