@@ -148,10 +148,10 @@ def button_press(button):
                 return
             curr_text = str(current)
             text["text"] = curr_text
-        except SympifyError:
-            messagebox.showerror("Invalid expression", "Invalid expression. Deductiong 10 points.")
+        except ValueError:
+            messagebox.showerror("Invalid expression", "Invalid expression. Deducting 10 points.")
             scoreVal -= 10
-            pass
+            score["text"] = f"Score: {scoreVal}"
         return
     
     if button == "c":
