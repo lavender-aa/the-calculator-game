@@ -162,7 +162,7 @@ def button_press(button):
     if button == "=": # acts as the submit button
         curr_digit = 0
         try: # update current
-            current = sympify(curr_text)
+            current = int(sympify(curr_text))
             if current == targetVal:
                 next_round()
                 return
