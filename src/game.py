@@ -33,6 +33,7 @@ current = random.randint(0, 99) # start with a random 2 digit number
 curr_text = f"{current}"
 targetVal = 100
 numButtonPresses = 20
+lives = 3
 curr_digit = len(str(current))
 curr_effect = 0
 effects = [ # list of tuples: name, desc
@@ -86,23 +87,54 @@ def next_round():
     current = random.randint(0, 99)
     curr_digit = len(str(current))
     curr_text = f"{current}"
-    targetVal *= 2
+    targetVal = random.randint(0,1000)
     
     # update labels
     text["text"] = curr_text
     score["text"] = f"Score: {scoreVal}"
     target["text"] = f"Target: {targetVal}"
     presses["text"] = f"Presses: {numButtonPresses}"
+    
+# restart the game if the player runs out of lives
+def restart():
+    global targetVal, scoreVal, curr_effect, lives, numButtonPresses, current, curr_digit, curr_text
+    targetVal = 100
+    scoreVal = 0
+    curr_effect = 0
+    lives = 3
+    numButtonPresses = 20
+    current = random.randint(0, 99)
+    curr_digit = len(str(current))
+    curr_text = str(current)
+    target["text"] = f"Target: {targetVal}"
+    score["text"] = f"Score: {scoreVal}"
+    effect["text"] = f"Effect: {effects[curr_effect][0]}"
+    livesL["text"] = f"Lives: {lives}"
+    presses["text"] = f"Presses: {numButtonPresses}"
+    text["text"] = curr_text
+    
+    
+    
 
 # handle each button
 def button_press(button):
-    global numButtonPresses, curr_text, curr_digit, scoreVal, current
+    global numButtonPresses, curr_text, curr_digit, scoreVal, current, lives
     
     # update presses
     numButtonPresses -= 1
     presses["text"] = f"Presses: {numButtonPresses}"
     
     if numButtonPresses == 0:
+        if current != target: 
+            lives -= 1
+            livesL["text"] = f"Lives: {lives}"
+            if lives == 0:
+                choice = messagebox.askyesno("Game Over", "Game over. Restart?")
+                if choice:
+                    restart()
+                    return
+                else:
+                    root.destroy()
         next_round()
         return
     
@@ -117,7 +149,6 @@ def button_press(button):
             curr_text = str(current)
             text["text"] = curr_text
         except SympifyError:
-            print("subtracting points")
             messagebox.showerror("Invalid expression", "Invalid expression. Deductiong 10 points.")
             scoreVal -= 10
             pass
@@ -141,11 +172,6 @@ def button_press(button):
         curr_digit = 0
         curr_text += button
         text["text"] = curr_text
-    
-def show_effect_info():
-    global curr_effect
-    print(curr_effect) # bug: always 0 for some reason
-    messagebox.showinfo(effects[curr_effect][0], effects[curr_effect][1])
 
 
 root = Tk()
@@ -163,7 +189,7 @@ score = Label(root, text=f"Score: {scoreVal}", padx=10, font=ltextfont)
 target = Label(root, text=f"Target: {targetVal}", padx=10, font=ltextfont)
 presses = Label(root, text=f"Presses: {numButtonPresses}", padx=10, font=ltextfont)
 effect = Label(root, text="Effect: None", padx=10, font=ltextfont)
-effect_info = Button(root, text="Effect Info", width=6, height=1, command=show_effect_info, font=lbuttonfont)
+livesL = Label(root, text=f"Lives: {lives}", padx=10, font=ltextfont)
 game_info = Button(root, text="Game Info", width=6, height=1, command=lambda: messagebox.showinfo("Game Information", gameinfo), font=lbuttonfont)
 
 # main calculator
@@ -218,7 +244,7 @@ score.grid(row=r, column=c, sticky="w")
 target.grid(row=r+1, column=c, sticky="w")
 presses.grid(row=r+2, column=c, sticky="w")
 effect.grid(row=r+3, column=c, sticky="w")
-effect_info.grid(row=r+4, column=c, sticky="n")
+livesL.grid(row=r+4, column=c, sticky="w")
 game_info.grid(row=r+5, column=c)
 c += 1
 
