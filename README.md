@@ -35,12 +35,12 @@ Some examples of what effects can look like:
 # Installation
 
 ## Windows
-- Clone this repository.
-- Find the game executable in the `builds/` directory.
+- Run `install.bat`
+- Find game executable in `/builds/`
 
 ## Unix
-- Clone this repository.
-- Run `install.sh` to create an executable inside the `builds/` directory.
+- Run `install.sh`
+- Find game executable in `/builds`
 
 # Uninstallation
 To uninstall, delete this repository.

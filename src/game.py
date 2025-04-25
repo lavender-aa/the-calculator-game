@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import tkinter.font as font
-from sympy import sympify, SympifyError
+from sympy import sympify
 import random
 
 
