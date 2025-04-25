@@ -149,8 +149,17 @@ def button_press(button):
             curr_text = str(current)
             text["text"] = curr_text
         except ValueError:
-            messagebox.showerror("Invalid expression", "Invalid expression. Deducting 10 points.")
             scoreVal -= 10
+            if scoreVal < -105:
+                messagebox.showerror("Despair.", "I have nothing more to say to you.")
+            elif -105 < scoreVal < -95:
+                messagebox.showerror("Betrayal.", "We make this beautiful, one-of-a-kind game for you and this is how you treat it? Despicable. Look at the poor calculator, it's begging for points. ")
+            elif -95 < scoreVal < -55:
+                messagebox.showerror("Invalid expression", "Deducting 10 points.")
+            elif -55 < scoreVal < -45:
+                messagebox.showerror("Mischief.", "Now you're just doing it on purpose. C'mon.")
+            else:
+                messagebox.showerror("Invalid expression", "Invalid expression. Deducting 10 points.")
             score["text"] = f"Score: {scoreVal}"
         return
     
