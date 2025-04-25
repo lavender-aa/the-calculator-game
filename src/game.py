@@ -5,10 +5,6 @@ from sympy import sympify, SympifyError
 import random
 
 
-# TODO:
-#   - [] implement effects
-
-
 # main layout: calculator
 #    _______ 
 #    c ( ) /
