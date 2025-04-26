@@ -248,17 +248,10 @@ zero = Button(root, text="0", width=15, height=2, command=lambda: button_press("
 enter = Button(root, text="=", width=3, height=2, command=lambda: button_press("="))
 
 # dictionary of game buttons
-# game_buttons = {
-#     "c": clear, "(": openP, ")": closeP, "/": divide, 
-#     "7": seven, "8": eight, "9": nine, "*": mult,
-#     "4": four, "5": five, "6": six, "-": sub,
-#     "1": one, "2": two, "3": three, "+": add,
-#     "0": zero, "=": enter
-# }
 game_buttons_nums = [
     one, two, three,
     four, five, six,
-    seven, eight, nine
+    seven, eight, nine, zero
 ]
 game_buttons_syms = [
     openP, closeP, divide,
