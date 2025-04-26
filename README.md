@@ -37,6 +37,9 @@ Some examples of what effects can look like:
 ## Windows
 - Run `install.bat`
 - Run game executable with `.\dist\game.exe`
+> [!NOTE]
+> You may need to manually add pyinstaller to your PATH if the script fails the first time for that reason.
+> If it is necessary, instructions are provided by the batch script (just be sure to keep an eye on the output near the end).
 
 ## Unix
 - Run `install.sh`
