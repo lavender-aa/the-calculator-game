@@ -11,4 +11,4 @@ python -m pip install pyinstaller sympy
 
 :: create binary
 echo Buliding game binary
-pyinstaller --noconfirm --onefile src\game.py
+pyinstaller --noconfirm --onefile --noconsole src\game.py
