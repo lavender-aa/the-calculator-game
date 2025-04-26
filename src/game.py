@@ -160,13 +160,13 @@ def button_press(button):
     
         
     if button == "=": # acts as the submit button
-        curr_digit = 0
         try: # update current
             current = int(sympify(curr_text))
             if current == targetVal:
                 next_round()
                 return
             curr_text = str(current)
+            curr_digit = len(str(current))
             text["text"] = curr_text
         except ValueError:
             scoreVal -= 10
